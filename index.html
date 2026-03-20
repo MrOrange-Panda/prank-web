@@ -2,21 +2,58 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>系统检测中...</title>
+
 <style>
   body {
     background: black;
     color: red;
     font-family: monospace;
     text-align: center;
-    padding-top: 100px;
+    padding-top: 15vh;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 8vw;
+    animation: blink 1s infinite;
+  }
+
+  p {
+    font-size: 6vw;
+    margin-top: 20px;
+  }
+
+  /* 闪烁效果 */
+  @keyframes blink {
+    50% { opacity: 0.3; }
+  }
+
+  /* 进度条 */
+  .bar {
+    width: 80%;
+    height: 20px;
+    border: 2px solid red;
+    margin: 40px auto;
+  }
+
+  .progress {
+    height: 100%;
+    width: 0%;
+    background: red;
   }
 </style>
 </head>
 
 <body>
-  <h1>⚠️ 检测到异常行为 ⚠️</h1>
-  <p id="text">正在扫描你的设备...</p>
+
+<h1>⚠️ 检测到异常行为 ⚠️</h1>
+<p id="text">正在扫描你的设备...</p>
+
+<div class="bar">
+  <div class="progress" id="progress"></div>
+</div>
 
 <script>
 let texts = [
@@ -24,25 +61,29 @@ let texts = [
   "正在上传照片...",
   "正在同步聊天记录...",
   "正在发送到服务器...",
+  "正在分析隐私数据...",
   "完成！"
 ];
 
 let i = 0;
+let progress = 0;
 
-setInterval(() => {
+let interval = setInterval(() => {
   if (i < texts.length) {
     document.getElementById("text").innerText = texts[i];
     i++;
-  } else {
-    alert("开个玩笑 😂 没有任何数据被获取！");
   }
-}, 1500);
 
-// 禁止返回
-history.pushState(null, null, location.href);
-window.onpopstate = function () {
-  history.go(1);
-};
+  progress += 15;
+  document.getElementById("progress").style.width = progress + "%";
+
+  if (progress >= 100) {
+    clearInterval(interval);
+    setTimeout(() => {
+      alert("开个玩笑 😂 没有任何数据被获取！");
+    }, 500);
+  }
+}, 1200);
 </script>
 
 </body>
